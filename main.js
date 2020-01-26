@@ -10,6 +10,14 @@ function toDate(timestamp) {
 }
 
 $(document).ready(() => {
+	$.ajax("https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases", {
+		type: "GET",
+		dataType: "text/html",
+		success: (data) => {
+			console.log(data);
+		}
+	});
+
 	$.ajax("https://tools.cdc.gov/api/v2/resources/media", {
 		type: "GET",
 		dataType: "jsonp",
