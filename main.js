@@ -48,7 +48,7 @@ $(document).ready(() => {
 			type: "GET", dataType: "json"
 		})
 	).done((cdcData, nytData) => {
-		console.log(nytData);
+		console.log(cdcData);
 		let cdcNcovData = cdcData[0]["results"]
 			.filter(obj => obj["description"].toLowerCase().includes("ncov"))
 			.map(obj => {
