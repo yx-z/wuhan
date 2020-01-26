@@ -3,10 +3,10 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
 
 const toDate = (timestamp) => {
 	let d = new Date(timestamp);
-	let year = d.getFullYear();
+	// let year = d.getFullYear();
 	let month = MONTHS[d.getMonth()];
 	let date = d.getDate();
-	return `${month} ${date}, ${year}`;
+	return `${month} ${date}`;
 };
 
 const corsReq = (target, onSuccess) => {
