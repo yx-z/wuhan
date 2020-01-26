@@ -11,7 +11,7 @@ html {
 }
 
 html {
-	font-size: 14px;
+	font-size: 1.4rem;
 	background-color: var(--bg-color);
 	color: var(--text-color);
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -26,7 +26,7 @@ body {
 	top: 0px;
 	left: 0px;
 	right: 0px;
-	font-size: 1rem;
+	font-size: 1.4rem;
 	line-height: 1.42857143;
 	overflow-x: hidden;
 	background-image: inherit;

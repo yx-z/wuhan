@@ -34,7 +34,8 @@ $(document).ready(() => {
 				let date = Date.parse(obj["pub_date"]);
 				return [date, `<a href="${url}" target="_blank">${header}</a><br/>`, "NYTimes"];
 			});
-		let concated = cdcNcovData.concat(nytNcovData).sort((p1, p2) => p2[0] - p1[0])
+		let concated = cdcNcovData.concat(nytNcovData)
+			.sort((p1, p2) => p2[0] - p1[0])
 			.map(p => `${p[2]}, ${toDate(p[0])} - ${p[1]}`);
 		$("#articles").html(concated);
 	});
