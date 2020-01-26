@@ -1,10 +1,10 @@
-const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
 	'Oct', 'Nov', 'Dec'];
 
 function timeConverter(timestamp) {
 	let d = new Date(timestamp);
 	let year = d.getFullYear();
-	let month = months[d.getMonth()];
+	let month = MONTHS[d.getMonth()];
 	let date = d.getDate();
 	return `${month} ${date}, ${year}`;
 }
@@ -14,7 +14,6 @@ $(document).ready(() => {
 		type: "GET",
 		dataType: "jsonp",
 		success: (data) => {
-			console.log(data);
 			let ncovData = data["results"]
 				.filter(obj => obj["description"].toLowerCase().includes("ncov"))
 				.map(obj => {
@@ -23,9 +22,8 @@ $(document).ready(() => {
 					let date = Date.parse(obj["dateContentUpdated"]);
 					return [date, `<a href="${url}" target="_blank">${header}</a><br/>`];
 				})
-				.sort((p1, p2) => p1[0] - p2[0])
+				.sort((p1, p2) => p2[0] - p1[0])
 				.map(p => `${timeConverter(p[0])} - ${p[1]}`);
-			console.log(ncovData);
 			$("#content-cdc").html(ncovData.join("<br/>"));
 		}
 	});
@@ -36,9 +34,15 @@ $(document).ready(() => {
 		dataType: "json",
 		success: (data) => {
 			console.log(data);
-			let ncovData = data["response"]["docs"].map(obj =>
-				`<a href="${obj['web_url']}" target="_blank">${obj["abstract"]}</a><br/>`
-			);
+			let ncovData = data["response"]["docs"]
+				.map(obj => {
+					let url = obj["web_url"];
+					let header = obj["abstract"];
+					let date = Date.parse(obj["pub_date"]);
+					return [date, `<a href="${url}" target="_blank">${header}</a><br/>`];
+				})
+				.sort((p1, p2) => p2[0] - p1[0])
+				.map(p => `${timeConverter(p[0])} - ${p[1]}`);
 			$("#content-nyt").html(ncovData.join("<br/>"));
 		}
 	})
