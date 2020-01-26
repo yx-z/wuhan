@@ -10,6 +10,7 @@ $(document).ready(() => {
 		}
 	});
 
+	// please don't abuse the api key...
 	$.ajax("https://api.nytimes.com/svc/search/v2/articlesearch.json?q=ncov&api-key=YYIVck53KehBzDgNXkUSZBxNK8QMpjwu", {
 		type: "GET",
 		dataType: "json",
