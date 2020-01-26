@@ -9,7 +9,7 @@
 
 <h1>Wuhan 2019-nCoV</h1>
 
-<section id="sec-summary">
+<section>
 	<h2>Summary</h2>
 
 	The Centers for Disease Control and Prevention (CDC) is closely monitoring
@@ -22,7 +22,7 @@
 	investigations to learn more.
 </section>
 
-<section id="sec-news">
+<section>
 	<h2>News</h2>
 	<div>
 		<h3>Centers for Disease Control and Prevention (CDC)</h3>
@@ -39,30 +39,6 @@
 <script crossorigin="anonymous"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script>
-	$(document).ready(() => {
-		$.ajax("https://tools.cdc.gov/api/v2/resources/media", {
-			type: "GET",
-			dataType: "jsonp",
-			success: (data) => {
-				ncovData = data["results"]
-					.filter(obj => obj["description"].toLowerCase().includes("ncov"))
-					.map(obj => `<a href="${obj['sourceUrl']}">${obj["description"]}</a><br/>`);
-				$("#content-cdc").html(ncovData.join("<br/>"));
-			}
-		});
-
-		$.ajax("https://api.nytimes.com/svc/search/v2/articlesearch.json?q=ncov&api-key=YYIVck53KehBzDgNXkUSZBxNK8QMpjwu", {
-			type: "GET",
-			dataType: "json",
-			success: (data) => {
-				ncovData = data["response"]["docs"].map(obj =>
-					`<a href="${obj['web_url']}">${obj["abstract"]}</a><br/>`
-				);
-				$("#content-nyt").html(ncovData.join("<br/>"));
-			}
-		})
-	});
-</script>
+<script src="main.js"></script>
 </body>
 </html>
