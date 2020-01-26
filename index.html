@@ -7,12 +7,33 @@
 </head>
 <body>
 
+<h1>Wuhan 2019-nCoV</h1>
 
-<h2>Centers for Disease Control and Prevention (CDC)</h2>
-<div id="div-cdc"></div>
+<section id="sec-summary">
+	<h2>Summary</h2>
 
-<h2>New York Times</h2>
-<div id="div-nyt"></div>
+	The Centers for Disease Control and Prevention (CDC) is closely monitoring
+	an outbreak of respiratory illness caused by a novel (new) coronavirus first
+	identified in Wuhan, Hubei Province, China. Chinese authorities identified
+	the new coronavirus, which has resulted in hundreds of confirmed cases in
+	China, including cases outside Wuhan, with additional cases being identified
+	in a growing number of countries internationally. The first case in the
+	United States was announced on January 21, 2020. There are ongoing
+	investigations to learn more.
+</section>
+
+<section id="sec-news">
+	<h2>News</h2>
+	<div>
+		<h3>Centers for Disease Control and Prevention (CDC)</h3>
+		<div id="content-cdc"></div>
+	</div>
+
+	<div>
+		<h3>New York Times</h3>
+		<div id="content-nyt"></div>
+	</div>
+</section>
 
 <!-- jquery -->
 <script crossorigin="anonymous"
@@ -27,17 +48,18 @@
 				ncovData = data["results"]
 					.filter(obj => obj["description"].toLowerCase().includes("ncov"))
 					.map(obj => `<a href="${obj['sourceUrl']}">${obj["description"]}</a><br/>`);
-				$("#div-cdc").html(ncovData.join("<br/>"));
+				$("#content-cdc").html(ncovData.join("<br/>"));
 			}
 		});
-		$.ajax("https://api.nytimes.com/svc/search/v2/articlesearch.json?q=wuhan&api-key=YYIVck53KehBzDgNXkUSZBxNK8QMpjwu", {
+
+		$.ajax("https://api.nytimes.com/svc/search/v2/articlesearch.json?q=ncov&api-key=YYIVck53KehBzDgNXkUSZBxNK8QMpjwu", {
 			type: "GET",
 			dataType: "json",
 			success: (data) => {
 				ncovData = data["response"]["docs"].map(obj =>
 					`<a href="${obj['web_url']}">${obj["abstract"]}</a><br/>`
 				);
-				$("#div-nyt").html(ncovData.join("<br/>"));
+				$("#content-nyt").html(ncovData.join("<br/>"));
 			}
 		})
 	});
