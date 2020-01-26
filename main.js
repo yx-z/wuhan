@@ -51,8 +51,11 @@ $(document).ready(() => {
 		}),
 		$.ajax("https://api.currentsapi.services/v1/search?keywords=wuhan&apiKey=GhPrUSYJJPmo02-gPUw261xM_fLv0GggSg_73fVivLqLz9C4", {
 			type: "GET", dataType: "json"
+		}),
+		$.ajax("https://content.guardianapis.com/search?q=ncov&api-key=8dfc8a33-15f9-478d-93c1-69ba74f096d1", {
+			type: "GET", dataType: "json"
 		})
-	).done((cdcData, nytData, currentsData) => {
+	).done((cdcData, nytData, currentsData, theGuardianData) => {
 		let cdcNcovData = cdcData[0]["results"]
 			.filter(obj => obj["description"].toLowerCase().includes("ncov"))
 			.map(obj => {
@@ -68,14 +71,24 @@ $(document).ready(() => {
 				let date = Date.parse(obj["pub_date"]);
 				return [date, `<a href="${url}" target="_blank">${header}</a><br/>`, "NYTimes"];
 			});
-		let currentsNews = {};
+		let currentsNcovData = {};
 		currentsData[0]["news"].forEach(obj => {
 			let url = obj["url"];
 			let header = obj["title"];
 			let date = Date.parse(obj["published"]);
-			currentsNews[header] = [date, `<a href="${url}" target="_blank">${header}</a><br/>`, "Currents"];
+			currentsNcovData[header] = [date, `<a href="${url}" target="_blank">${header}</a><br/>`, "Currents"];
 		});
-		let concated = cdcNcovData.concat(nytNcovData).concat(Object.values(currentsNews).slice(0, 5))
+		let theGuardianNcovData = theGuardianData[0]["response"]["results"]
+			.map(obj => {
+				let url = obj["webUrl"];
+				let header = obj["webTitle"];
+				let date = Date.parse(obj["webPublicationDate"]);
+				return currentsNcovData[header] = [date, `<a href="${url}" target="_blank">${header}</a><br/>`, "The Guardian"];
+			});
+		let concated = cdcNcovData
+			.concat(nytNcovData)
+			.concat(Object.values(currentsNcovData).slice(0, 5))
+			.concat(theGuardianNcovData)
 			.sort((p1, p2) => p2[0] - p1[0])
 			.map(p => `${p[2]}, ${toDate(p[0])} - ${p[1]}`);
 		$("#articles").html(concated);
