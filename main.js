@@ -9,26 +9,18 @@ const toDate = (timestamp) => {
 	return `${month} ${date}, ${year}`;
 };
 
-const toLink = (dict, urlKey, headerKey, dateKey, source) => {
-	let url = dict[urlKey];
-	let header = dict[headerKey];
-	let date = Date.parse(dict[dateKey]);
-	return [date, `<a href="${url}" target="_blank">${header}</a><br/>`, source];
-};
-
-
 const corsReq = (target, onSuccess) => {
 	let req = new XMLHttpRequest();
 	req.open(target.method, "https://cors-anywhere.herokuapp.com/" + target.url);
 	req.onload = req.onerror = function () {
 		onSuccess(
-			target.method + ' ' + target.url + '\n' +
-			req.status + ' ' + req.statusText + '\n\n' +
-			(req.responseText || '')
+			target.method + " " + target.url + "\n" +
+			req.status + " " + req.statusText + "\n\n" +
+			(req.responseText || "")
 		);
 	};
 	if (/^POST/i.test(target.method)) {
-		req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	}
 	req.send(target.data);
 };
@@ -56,11 +48,22 @@ $(document).ready(() => {
 			type: "GET", dataType: "json"
 		})
 	).done((cdcData, nytData) => {
+		console.log(nytData);
 		let cdcNcovData = cdcData[0]["results"]
 			.filter(obj => obj["description"].toLowerCase().includes("ncov"))
-			.map(obj => toLink(obj, "sourceUrl", "description", "dateContentUpdated", "CDC"));
+			.map(obj => {
+				let url = obj["sourceUrl"];
+				let header = obj["description"];
+				let date = Date.parse(obj["dateContentUpdated"]);
+				return [date, `<a href="${url}" target="_blank">${header}</a><br/>`, "CDC"];
+			});
 		let nytNcovData = nytData[0]["response"]["docs"]
-			.map(obj => toLink(obj, "web_url", "abstract", "pub_date", "NYTimes"));
+			.map(obj => {
+				let url = obj["web_url"];
+				let header = obj["headline"]["main"];
+				let date = Date.parse(obj["pub_date"]);
+				return [date, `<a href="${url}" target="_blank">${header}</a><br/>`, "NYTimes"];
+			});
 		let concated = cdcNcovData.concat(nytNcovData)
 			.sort((p1, p2) => p2[0] - p1[0])
 			.map(p => `${p[2]}, ${toDate(p[0])} - ${p[1]}`);
