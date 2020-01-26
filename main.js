@@ -44,11 +44,11 @@ $(document).ready(() => {
 		$.ajax("https://tools.cdc.gov/api/v2/resources/media", {
 			type: "GET", dataType: "jsonp"
 		}),
+		// pls. don't abuse api key
 		$.ajax("https://api.nytimes.com/svc/search/v2/articlesearch.json?q=ncov&api-key=YYIVck53KehBzDgNXkUSZBxNK8QMpjwu", {
 			type: "GET", dataType: "json"
 		})
 	).done((cdcData, nytData) => {
-		console.log(cdcData);
 		let cdcNcovData = cdcData[0]["results"]
 			.filter(obj => obj["description"].toLowerCase().includes("ncov"))
 			.map(obj => {
