@@ -27,7 +27,6 @@ $(document).ready(() => {
 				let date = Date.parse(obj["dateContentUpdated"]);
 				return [date, `<a href="${url}" target="_blank">${header}</a><br/>`, "CDC"];
 			});
-		console.log(nytData);
 		let nytNcovData = nytData[0]["response"]["docs"]
 			.map(obj => {
 				let url = obj["web_url"];
