@@ -32,10 +32,11 @@ $(document).ready(() => {
 		method: "GET"
 	}, (data) => {
 		let html = $.parseHTML(data);
-		let situation = $(html).find(".field .field--item")[0];
+		let situation = $(html).find(".field.field--name-field-pt-text.field--type-text-long.field--label-hidden.field--item")[0];
 		$(situation).find("h4").remove();
 		$(situation).find("h2").next().remove();
 		$(situation).find("h2").remove();
+		$(situation).children().last().remove();
 		$("#situation").html(situation.outerHTML);
 	});
 
