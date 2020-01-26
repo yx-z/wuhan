@@ -32,23 +32,30 @@ $(document).ready(() => {
 		method: "GET"
 	}, (data) => {
 		let html = $.parseHTML(data);
-		let situation = $(html).find(".field .field--item")[0];
+		let situation = $(html).find(".field.field--name-field-pt-text.field--type-text-long.field--label-hidden.field--item")[0];
 		$(situation).find("h4").remove();
 		$(situation).find("h2").next().remove();
 		$(situation).find("h2").remove();
+		$(situation).children().last().remove();
 		$("#situation").html(situation.outerHTML);
 	});
 
 	// articles
+	// pls. don't abuse api key
 	$.when(
 		$.ajax("https://tools.cdc.gov/api/v2/resources/media", {
 			type: "GET", dataType: "jsonp"
 		}),
 		$.ajax("https://api.nytimes.com/svc/search/v2/articlesearch.json?q=ncov&api-key=YYIVck53KehBzDgNXkUSZBxNK8QMpjwu", {
 			type: "GET", dataType: "json"
+		}),
+		$.ajax("https://api.currentsapi.services/v1/search?keywords=wuhan&apiKey=GhPrUSYJJPmo02-gPUw261xM_fLv0GggSg_73fVivLqLz9C4", {
+			type: "GET", dataType: "json"
+		}),
+		$.ajax("https://content.guardianapis.com/search?q=ncov&api-key=8dfc8a33-15f9-478d-93c1-69ba74f096d1", {
+			type: "GET", dataType: "json"
 		})
-	).done((cdcData, nytData) => {
-		console.log(cdcData);
+	).done((cdcData, nytData, currentsData, theGuardianData) => {
 		let cdcNcovData = cdcData[0]["results"]
 			.filter(obj => obj["description"].toLowerCase().includes("ncov"))
 			.map(obj => {
@@ -64,7 +71,24 @@ $(document).ready(() => {
 				let date = Date.parse(obj["pub_date"]);
 				return [date, `<a href="${url}" target="_blank">${header}</a><br/>`, "NYTimes"];
 			});
-		let concated = cdcNcovData.concat(nytNcovData)
+		let currentsNcovData = {};
+		currentsData[0]["news"].forEach(obj => {
+			let url = obj["url"];
+			let header = obj["title"];
+			let date = Date.parse(obj["published"]);
+			currentsNcovData[header] = [date, `<a href="${url}" target="_blank">${header}</a><br/>`, "Currents"];
+		});
+		let theGuardianNcovData = theGuardianData[0]["response"]["results"]
+			.map(obj => {
+				let url = obj["webUrl"];
+				let header = obj["webTitle"];
+				let date = Date.parse(obj["webPublicationDate"]);
+				return currentsNcovData[header] = [date, `<a href="${url}" target="_blank">${header}</a><br/>`, "The Guardian"];
+			});
+		let concated = cdcNcovData
+			.concat(nytNcovData)
+			.concat(Object.values(currentsNcovData).slice(0, 5))
+			.concat(theGuardianNcovData)
 			.sort((p1, p2) => p2[0] - p1[0])
 			.map(p => `${p[2]}, ${toDate(p[0])} - ${p[1]}`);
 		$("#articles").html(concated);
