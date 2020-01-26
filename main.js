@@ -5,7 +5,7 @@ $(document).ready(() => {
 		success: (data) => {
 			ncovData = data["results"]
 				.filter(obj => obj["description"].toLowerCase().includes("ncov"))
-				.map(obj => `<a href="${obj['sourceUrl']}">${obj["description"]}</a><br/>`);
+				.map(obj => `<a href="${obj['sourceUrl']}" target="_blank">${obj["description"]}</a><br/>`);
 			$("#content-cdc").html(ncovData.join("<br/>"));
 		}
 	});
@@ -16,7 +16,7 @@ $(document).ready(() => {
 		dataType: "json",
 		success: (data) => {
 			ncovData = data["response"]["docs"].map(obj =>
-				`<a href="${obj['web_url']}">${obj["abstract"]}</a><br/>`
+				`<a href="${obj['web_url']}" target="_blank">${obj["abstract"]}</a><br/>`
 			);
 			$("#content-nyt").html(ncovData.join("<br/>"));
 		}
