@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Wuhan nCoV</title>
+</head>
+<body>
+
+
+<h2>Centers for Disease Control and Prevention (CDC)</h2>
+<div id="div-cdc"></div>
+
+<h2>New York Times</h2>
+<div id="div-nyt"></div>
+
+<script crossorigin="anonymous"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+	$(document).ready(() => {
+		$.ajax("https://tools.cdc.gov/api/v2/resources/media", {
+			type: "GET",
+			dataType: "jsonp",
+			success: (data) => {
+				ncovData = data["results"]
+					.filter(obj => obj["description"].toLowerCase().includes("ncov"))
+					.map(obj => `<a href="${obj['sourceUrl']}">${obj["description"]}</a>`);
+				$("#div-cdc").html(ncovData.join("<br/>"));
+			}
+		})
+	});
+</script>
+
+</body>
+</html>
