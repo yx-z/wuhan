@@ -1,9 +1,16 @@
+const parseDate = (date) => {
+	const parsed = Date.parse(date);
+	if (!isNaN(parsed)) {
+		return parsed;
+	}
+	return Date.parse(date.replace(/-/g, '/').replace(/[a-z]+/gi, ' '));
+};
+
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
 	"Oct", "Nov", "Dec"];
 
 const toDate = (timestamp) => {
 	let d = new Date(timestamp);
-	// let year = d.getFullYear();
 	let month = MONTHS[d.getMonth()];
 	let date = d.getDate();
 	return `${month} ${date}`;
@@ -59,14 +66,15 @@ $(document).ready(() => {
 		let cdcNcovData = cdcData[0]["results"]
 			.filter(obj => obj["description"].toLowerCase().includes("ncov"))
 			.map(obj => {
-				let date = Date.parse(obj["dateContentUpdated"]);
+				let date = parseDate(obj["dateContentUpdated"]);
 				let url = obj["sourceUrl"];
 				let header = obj["description"];
 				return [date, "CDC", url, header, "", ""];
 			});
 		let nytNcovData = nytData[0]["response"]["docs"]
 			.map(obj => {
-				let date = Date.parse(obj["pub_date"]);
+				let date = parseDate(obj["pub_date"]);
+				console.log(date);
 				let url = obj["web_url"];
 				let header = obj["headline"]["main"];
 				let abstract = obj["abstract"];
@@ -74,7 +82,7 @@ $(document).ready(() => {
 			});
 		let currentsNcovData = {};
 		currentsData[0]["news"].forEach(obj => {
-			let date = Date.parse(obj["published"]);
+			let date = parseDate(obj["published"]);
 			let url = obj["url"];
 			let header = obj["title"];
 			let abstract = obj["description"];
@@ -82,7 +90,7 @@ $(document).ready(() => {
 		});
 		let theGuardianNcovData = theGuardianData[0]["response"]["results"]
 			.map(obj => {
-				let date = Date.parse(obj["webPublicationDate"]);
+				let date = parseDate(obj["webPublicationDate"]);
 				let url = obj["webUrl"];
 				let header = obj["webTitle"];
 				return [date, "The Guardian", url, header, ""];
