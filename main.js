@@ -78,7 +78,7 @@ $(document).ready(() => {
 			let url = obj["url"];
 			let header = obj["title"];
 			let abstract = obj["description"];
-			currentsNcovData[header] = [date, "Misc.", url, header, abstract];
+			currentsNcovData[header] = [date, "Latest", url, header, abstract];
 		});
 		let theGuardianNcovData = theGuardianData[0]["response"]["results"]
 			.map(obj => {
