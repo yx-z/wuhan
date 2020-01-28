@@ -1,9 +1,10 @@
 const parseDate = (date) => {
 	const parsed = Date.parse(date);
-	if (!isNaN(parsed)) {
+	if (isNaN(parsed)) {
+		return Date.parse(date.replace(/-/g, '/').replace(/[a-z]+/gi, ' '));
+	} else {
 		return parsed;
 	}
-	return Date.parse(date.replace(/-/g, '/').replace(/[a-z]+/gi, ' '));
 };
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
