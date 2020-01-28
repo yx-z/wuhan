@@ -74,7 +74,6 @@ $(document).ready(() => {
 		let nytNcovData = nytData[0]["response"]["docs"]
 			.map(obj => {
 				let date = parseDate(obj["pub_date"]);
-				console.log(date);
 				let url = obj["web_url"];
 				let header = obj["headline"]["main"];
 				let abstract = obj["abstract"];
