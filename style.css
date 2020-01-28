@@ -1406,3 +1406,11 @@ input {
 .typora-export li, .typora-export p, .typora-export, .footnote-line {
 	white-space: normal;
 }
+
+.news {
+	margin: 10px;
+	border: 2px solid #fffeee;
+	background-color: #fffeee;
+	padding: 10px;
+	border-radius: 20px 10px;
+}

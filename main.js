@@ -59,38 +59,40 @@ $(document).ready(() => {
 		let cdcNcovData = cdcData[0]["results"]
 			.filter(obj => obj["description"].toLowerCase().includes("ncov"))
 			.map(obj => {
+				let date = Date.parse(obj["dateContentUpdated"]);
 				let url = obj["sourceUrl"];
 				let header = obj["description"];
-				let date = Date.parse(obj["dateContentUpdated"]);
-				return [date, `<a href="${url}" target="_blank">${header}</a><br/>`, "CDC"];
+				return [date, "CDC", url, header, "", ""];
 			});
 		let nytNcovData = nytData[0]["response"]["docs"]
 			.map(obj => {
+				let date = Date.parse(obj["pub_date"]);
 				let url = obj["web_url"];
 				let header = obj["headline"]["main"];
-				let date = Date.parse(obj["pub_date"]);
-				return [date, `<a href="${url}" target="_blank">${header}</a><br/>`, "NYTimes"];
+				let abstract = obj["abstract"];
+				return [date, "NYTimes", url, header, abstract];
 			});
 		let currentsNcovData = {};
 		currentsData[0]["news"].forEach(obj => {
+			let date = Date.parse(obj["published"]);
 			let url = obj["url"];
 			let header = obj["title"];
-			let date = Date.parse(obj["published"]);
-			currentsNcovData[header] = [date, `<a href="${url}" target="_blank">${header}</a><br/>`, "Currents"];
+			let abstract = obj["description"];
+			currentsNcovData[header] = [date, "Misc.", url, header, abstract];
 		});
 		let theGuardianNcovData = theGuardianData[0]["response"]["results"]
 			.map(obj => {
+				let date = Date.parse(obj["webPublicationDate"]);
 				let url = obj["webUrl"];
 				let header = obj["webTitle"];
-				let date = Date.parse(obj["webPublicationDate"]);
-				return currentsNcovData[header] = [date, `<a href="${url}" target="_blank">${header}</a><br/>`, "The Guardian"];
+				return [date, "The Guardian", url, header, ""];
 			});
 		let concated = cdcNcovData
 			.concat(nytNcovData)
 			.concat(Object.values(currentsNcovData).slice(0, 5))
 			.concat(theGuardianNcovData)
 			.sort((p1, p2) => p2[0] - p1[0])
-			.map(p => `${p[2]}, ${toDate(p[0])} - ${p[1]}`);
+			.map(p => `<div class="news">${p[1]} - ${toDate(p[0])}, <a href="${p[2]}" target="_blank">${p[3]}</a><div style="font-size: 1.1rem;">${p[4]}</div></div>`);
 		$("#articles").html(concated);
 	});
 });
