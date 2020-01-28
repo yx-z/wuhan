@@ -7,14 +7,9 @@ const parseDate = (date) => {
 	}
 };
 
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
-	"Oct", "Nov", "Dec"];
-
 const toDate = (timestamp) => {
 	let d = new Date(timestamp);
-	let month = MONTHS[d.getMonth()];
-	let date = d.getDate();
-	return `${month} ${date}`;
+	return `${d.getMonth() + 1}/${d.getDate()}`;
 };
 
 const corsReq = (target, onSuccess) => {
